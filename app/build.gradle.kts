@@ -1,6 +1,8 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -51,6 +53,7 @@ val compose_version by rootProject.properties
 val lifecycle_runtime_ktx by rootProject.properties
 val activity_compose by rootProject.properties
 val material3 by rootProject.properties
+val room_version by rootProject.properties
 
 dependencies {
     implementation("androidx.core:core-ktx:$core_ktx")
@@ -59,6 +62,12 @@ dependencies {
     implementation("androidx.compose.ui:ui:$compose_version")
     implementation("androidx.compose.ui:ui-tooling-preview:$compose_version")
     implementation("androidx.compose.material3:material3:$material3")
+
+    //room
+    implementation("androidx.room:room-runtime:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
     debugImplementation("androidx.compose.ui:ui-tooling:$compose_version")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
 }
