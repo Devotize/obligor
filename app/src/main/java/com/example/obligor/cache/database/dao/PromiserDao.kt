@@ -9,7 +9,7 @@ import com.example.obligor.cache.database.models.PromiserEntity
 @Dao
 interface PromiserDao {
 
-    @Query("SELECT * FROM ${PromiserEntity.TABLE_NAME} WERE name IN (:promiserName)")
+    @Query("SELECT * FROM ${PromiserEntity.TABLE_NAME} WHERE promiser_name = :promiserName")
     suspend fun getPromiser(promiserName: String): PromiserEntity
 
     @Query("SELECT * FROM ${PromiserEntity.TABLE_NAME}")

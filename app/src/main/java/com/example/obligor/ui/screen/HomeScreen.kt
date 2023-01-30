@@ -10,7 +10,9 @@ import kotlinx.coroutines.flow.Flow
 fun HomeScreen(
     _allPromisers: Flow<List<Promiser>>,
     _selectedPromiser: Flow<Promiser>,
+    addPromiser: (String) -> Unit,
 ) {
+
     logXertz("home screen inited")
 
     val promisers = _allPromisers.collectAsState(initial = listOf())

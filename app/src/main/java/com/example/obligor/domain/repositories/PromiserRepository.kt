@@ -3,7 +3,7 @@ package com.example.obligor.domain.repositories
 import com.example.obligor.cache.database.data_source.PromiserDataSource
 import com.example.obligor.domain.models.Promiser
 
-class AppRepository {
+class PromiserRepository {
 
     private val promiserDataSource by lazy {
         PromiserDataSource()
