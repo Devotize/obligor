@@ -3,7 +3,7 @@ package com.example.obligor.cache.database
 import android.content.Context
 import androidx.room.Room
 
-object AppDatabaseInstanceProvider {
+object DatabaseInstanceProvider {
 
     private var _instance: ObligorDatabase? = null
     val instance by lazy { _instance!! }
