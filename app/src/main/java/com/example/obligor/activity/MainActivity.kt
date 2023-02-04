@@ -41,7 +41,8 @@ class MainActivity : ComponentActivity() {
                     HomeScreen(
                         _allPromisers = appInteractor.allPromisers,
                         _selectedPromiser = appInteractor.selectedPromiser,
-                        addPromiser = appInteractor::onSelectPromiser,
+                        addPromiser = appInteractor::addPromiser,
+                        onPromiserCreditChange = appInteractor::selectedPromiserCreditChange
                     )
                 }
             }

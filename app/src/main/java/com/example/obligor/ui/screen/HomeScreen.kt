@@ -2,6 +2,7 @@ package com.example.obligor.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import com.example.obligor.domain.models.Promiser
 import com.example.obligor.ui.dimens.Dimens
 import com.example.obligor.utils.ShowCommonKeyboard
-import com.example.obligor.utils.logXertz
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -43,43 +43,60 @@ fun HomeScreen(
     _allPromisers: Flow<List<Promiser>>,
     _selectedPromiser: Flow<Promiser>,
     addPromiser: (String) -> Unit,
+    onPromiserCreditChange: (Double) -> Unit
 ) {
     val promisers = _allPromisers.collectAsState(initial = listOf())
     val selectedPromiser = _selectedPromiser.collectAsState(initial = Promiser.EmptyPromiser)
-    val increaseTextFiled = remember { mutableStateOf(TextFieldValue()) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.paddingMedium),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AmountInput(
-                leadingText = "-",
-                enabled = selectedPromiser.value.name.isNotEmpty(),
-                onDoneAction = {
-                    logXertz("onDoneAction: $it")
-                }
-            )
-            AmountInput(
-                leadingText = "+",
-                enabled = selectedPromiser.value.name.isNotEmpty(),
-                onDoneAction = {
-                    logXertz("onDoneAction: $it")
-                }
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (!selectedPromiser.value.isPromiserEmpty()) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = Dimens.paddingMedium),
+                text = selectedPromiser.value.name,
             )
         }
-        Spacer(modifier = Modifier.height(32.dp))
-        if (selectedPromiser.value.isPromiserEmpty()) {
-            AddFirstObligorComponent(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            )
-        } else {
-            Text(text = "${selectedPromiser.value.credit}₽")
+
+        Column(modifier = Modifier.fillMaxSize()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.paddingMedium),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                AmountInput(
+                    leadingText = "-",
+                    enabled = selectedPromiser.value.name.isNotEmpty(),
+                    onDoneAction = {
+                        onPromiserCreditChange.invoke(-it.toDouble())
+                    }
+                )
+                AmountInput(
+                    leadingText = "+",
+                    enabled = selectedPromiser.value.name.isNotEmpty(),
+                    onDoneAction = {
+                        onPromiserCreditChange.invoke(it.toDouble())
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            if (selectedPromiser.value.isPromiserEmpty()) {
+                AddFirstObligorComponent(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    onDoneAction = {
+                        addPromiser.invoke(it)
+                    }
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    text = "${selectedPromiser.value.credit}₽",
+                )
+            }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -118,6 +135,7 @@ private fun AmountInput(
             onDone = {
                 focusManager.clearFocus(force = true)
                 onDoneAction.invoke(inputTextField.value.text)
+                inputTextField.value = TextFieldValue()
             }
         ),
         leadingIcon = {
@@ -133,6 +151,7 @@ private fun AmountInput(
 @Composable
 private fun AddFirstObligorComponent(
     modifier: Modifier = Modifier,
+    onDoneAction: (String) -> Unit,
 ) {
     val shouldShowKeyboard = remember {
         mutableStateOf(false)
@@ -143,7 +162,13 @@ private fun AddFirstObligorComponent(
         ShowCommonKeyboard(
             newObligorName,
             imeAction = ImeAction.Done,
-            onImeAction = {},
+            onImeAction = {
+                with(newObligorName.value) {
+                    if (text.isNotEmpty()) {
+                        onDoneAction.invoke(text)
+                    }
+                }
+            },
             focusListener = {
                 shouldShowKeyboard.value = it
             }
