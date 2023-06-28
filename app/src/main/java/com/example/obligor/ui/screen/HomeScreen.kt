@@ -1,6 +1,7 @@
 package com.example.obligor.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,13 +11,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -43,19 +48,35 @@ fun HomeScreen(
     _allPromisers: Flow<List<Promiser>>,
     _selectedPromiser: Flow<Promiser>,
     addPromiser: (String) -> Unit,
-    onPromiserCreditChange: (Double) -> Unit
+    onPromiserCreditChange: (Double) -> Unit,
+    onPromiserClick: () -> Unit,
 ) {
     val promisers = _allPromisers.collectAsState(initial = listOf())
     val selectedPromiser = _selectedPromiser.collectAsState(initial = Promiser.EmptyPromiser)
-
     Box(modifier = Modifier.fillMaxSize()) {
         if (!selectedPromiser.value.isPromiserEmpty()) {
             Text(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = Dimens.paddingMedium),
+                    .padding(bottom = Dimens.paddingMedium)
+                    .clickable {
+                        onPromiserClick.invoke()
+                    },
                 text = selectedPromiser.value.name,
             )
+            OutlinedButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = Dimens.paddingHuge, end = Dimens.paddingLarge),
+                shape = ShapeDefaults.Medium,
+                onClick = { /*TODO*/ }
+            ) {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                )
+            }
         }
 
         Column(modifier = Modifier.fillMaxSize()) {

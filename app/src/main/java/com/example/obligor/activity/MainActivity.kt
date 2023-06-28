@@ -13,8 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.obligor.interactor.AppInteractor
+import com.example.obligor.ui.destinations.Destination
 import com.example.obligor.ui.screen.HomeScreen
+import com.example.obligor.ui.screen.PromiserSelectionScreen
 import com.example.obligor.ui.theme.ObligorTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,12 +43,26 @@ class MainActivity : ComponentActivity() {
                         ),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    HomeScreen(
-                        _allPromisers = appInteractor.allPromisers,
-                        _selectedPromiser = appInteractor.selectedPromiser,
-                        addPromiser = appInteractor::addPromiser,
-                        onPromiserCreditChange = appInteractor::selectedPromiserCreditChange
-                    )
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Destination.HomeScreen.route
+                    ) {
+                        composable(Destination.HomeScreen.route) {
+                            HomeScreen(
+                                _allPromisers = appInteractor.allPromisers,
+                                _selectedPromiser = appInteractor.selectedPromiser,
+                                addPromiser = appInteractor::addPromiser,
+                                onPromiserCreditChange = appInteractor::selectedPromiserCreditChange,
+                                onPromiserClick = {
+                                    navController.navigate(Destination.PromiserSelectionScreen.route)
+                                }
+                            )
+                        }
+                        composable(Destination.PromiserSelectionScreen.route) {
+                            PromiserSelectionScreen()
+                        }
+                    }
                 }
             }
         }

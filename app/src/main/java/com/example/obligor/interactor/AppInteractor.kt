@@ -2,7 +2,6 @@ package com.example.obligor.interactor
 
 import com.example.obligor.domain.models.Promiser
 import com.example.obligor.domain.repositories.PromiserRepository
-import com.example.obligor.utils.logXertz
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -42,7 +41,6 @@ class AppInteractor {
     init {
         CoroutineScope(Dispatchers.IO).launch {
             collectAllPromisers().collect {
-                logXertz("collectAllPromisers: $it")
                 _allPromisers.emit(it)
                 if (it.isNotEmpty()) {
                     _selectedPromiser.emit(it.first())
