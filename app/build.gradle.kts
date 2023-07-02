@@ -55,6 +55,7 @@ val activity_compose by rootProject.properties
 val material3 by rootProject.properties
 val room_version by rootProject.properties
 val nav_version by rootProject.properties
+val data_store_version by rootProject.properties
 
 dependencies {
     implementation("androidx.core:core-ktx:$core_ktx")
@@ -69,6 +70,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:$data_store_version")
 
     debugImplementation("androidx.compose.ui:ui-tooling:$compose_version")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")

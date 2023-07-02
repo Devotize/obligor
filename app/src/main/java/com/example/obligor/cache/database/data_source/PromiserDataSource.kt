@@ -1,8 +1,8 @@
 package com.example.obligor.cache.database.data_source
 
 import android.util.Log
-import com.example.obligor.cache.database.DatabaseInstanceProvider
 import com.example.obligor.cache.database.models.PromiserEntity
+import com.example.obligor.cache.database.provoders.DatabaseInstanceProvider
 import com.example.obligor.domain.core.Dto
 import com.example.obligor.domain.models.Promiser
 import kotlinx.coroutines.flow.Flow

@@ -7,6 +7,7 @@ buildscript {
         set("material3", "1.1.0-alpha05")
         set("room_version", "2.5.0")
         set("nav_version", "2.6.0")
+        set("data_store_version", "1.0.0")
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

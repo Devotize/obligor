@@ -16,7 +16,7 @@ interface PromiserDao {
     @Query("SELECT * FROM ${PromiserEntity.TABLE_NAME}")
     fun getAllPromisers(): Flow<List<PromiserEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertPromiser(promiser: PromiserEntity)
 
     @Query("UPDATE ${PromiserEntity.TABLE_NAME} SET credit = :newCredit WHERE promiser_name = :promiserName")

@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.obligor.domain.models.Promiser
 import com.example.obligor.interactor.AppInteractor
 import com.example.obligor.ui.destinations.Destination
 import com.example.obligor.ui.screen.HomeScreen
@@ -56,6 +57,12 @@ class MainActivity : ComponentActivity() {
                                 onPromiserCreditChange = appInteractor::selectedPromiserCreditChange,
                                 onPromiserClick = {
                                     navController.navigate(Destination.PromiserSelectionScreen.route)
+                                },
+                                onAddPromiserClick = {
+                                    appInteractor.selectPromiser(Promiser.EmptyPromiser)
+                                },
+                                onCancelAddPromiserClick = {
+                                    appInteractor.selectLastPromiser()
                                 }
                             )
                         }

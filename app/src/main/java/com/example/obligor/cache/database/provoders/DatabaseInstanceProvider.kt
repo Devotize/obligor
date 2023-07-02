@@ -1,7 +1,8 @@
-package com.example.obligor.cache.database
+package com.example.obligor.cache.database.provoders
 
 import android.content.Context
 import androidx.room.Room
+import com.example.obligor.cache.database.ObligorDatabase
 
 object DatabaseInstanceProvider {
 

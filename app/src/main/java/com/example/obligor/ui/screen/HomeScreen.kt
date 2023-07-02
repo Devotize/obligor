@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,9 +51,11 @@ fun HomeScreen(
     addPromiser: (String) -> Unit,
     onPromiserCreditChange: (Double) -> Unit,
     onPromiserClick: () -> Unit,
+    onAddPromiserClick: () -> Unit,
+    onCancelAddPromiserClick: () -> Unit,
 ) {
-    val promisers = _allPromisers.collectAsState(initial = listOf())
     val selectedPromiser = _selectedPromiser.collectAsState(initial = Promiser.EmptyPromiser)
+    val allPromisers = _allPromisers.collectAsState(initial = listOf())
     Box(modifier = Modifier.fillMaxSize()) {
         if (!selectedPromiser.value.isPromiserEmpty()) {
             Text(
@@ -69,11 +72,29 @@ fun HomeScreen(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = Dimens.paddingHuge, end = Dimens.paddingLarge),
                 shape = ShapeDefaults.Medium,
-                onClick = { /*TODO*/ }
+                onClick = {
+                    onAddPromiserClick.invoke()
+                }
             ) {
                 Icon(
                     modifier = Modifier.size(32.dp),
                     imageVector = Icons.Filled.Add,
+                    contentDescription = null,
+                )
+            }
+        } else if (selectedPromiser.value.isPromiserEmpty() && allPromisers.value.isNotEmpty()) {
+            OutlinedButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = Dimens.paddingHuge, end = Dimens.paddingLarge),
+                shape = ShapeDefaults.Medium,
+                onClick = {
+                    onCancelAddPromiserClick.invoke()
+                }
+            ) {
+                Icon(
+                    modifier = Modifier.size(32.dp),
+                    imageVector = Icons.Filled.Close,
                     contentDescription = null,
                 )
             }
@@ -197,7 +218,7 @@ private fun AddFirstObligorComponent(
     }
     Column(modifier = modifier) {
         Text(
-            text = "Please, Add your first obligor! ${newObligorName.value.text}",
+            text = "Please, Add your obligor! ${newObligorName.value.text}",
         )
         Spacer(modifier = Modifier.height(Dimens.paddingSmall))
         IconButton(
