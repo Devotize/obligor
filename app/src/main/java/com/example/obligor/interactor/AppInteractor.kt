@@ -2,7 +2,7 @@ package com.example.obligor.interactor
 
 import com.example.obligor.domain.models.Promiser
 import com.example.obligor.domain.repositories.PromiserRepository
-import kotlinx.coroutines.CoroutineScope
+import com.example.obligor.interactor.scope.InteractorScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,13 +20,13 @@ class AppInteractor {
     val allPromisers = _allPromisers.asStateFlow()
 
     fun addPromiser(name: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        InteractorScope.launch(Dispatchers.IO) {
             promiserRepository.addPromiser(name)
         }
     }
 
     fun selectedPromiserCreditChange(difference: Double) {
-        CoroutineScope(Dispatchers.IO).launch {
+        InteractorScope.launch {
             val promiser = _selectedPromiser.value
             promiserRepository.updatePromiser(
                 name = promiser.name,
@@ -35,11 +35,17 @@ class AppInteractor {
         }
     }
 
+    fun selectPromiser(promiser: Promiser) {
+        InteractorScope.launch {
+            _selectedPromiser.emit(promiser)
+        }
+    }
+
     private suspend fun collectAllPromisers(): Flow<List<Promiser>> =
         promiserRepository.getAllPromisers()
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        InteractorScope.launch {
             collectAllPromisers().collect {
                 _allPromisers.emit(it)
                 if (it.isNotEmpty()) {

@@ -60,7 +60,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(Destination.PromiserSelectionScreen.route) {
-                            PromiserSelectionScreen()
+                            PromiserSelectionScreen(
+                                selectedPromiser = appInteractor.selectedPromiser,
+                                allPromisers = appInteractor.allPromisers,
+                                onPromiserClick = {
+                                    appInteractor.selectPromiser(it)
+                                    navController.popBackStack()
+                                }
+                            )
                         }
                     }
                 }
